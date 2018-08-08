@@ -2,6 +2,10 @@
 Mechanical twerk is a collection of scripts for using Amazon Mechanical Turk to annotate the actions of videos in scarif.
 ![twerkerama](http://cdn.smosh.com/wp-content/uploads/ftpuploads/bloguploads/0913/nerdy-twerking-futurama.gif)
 
+## Setup ##
+This is intended to be run on an ec2 instance of the `Deep Learning AMI (Amazon Linux) Version 9.0 (ami-5f2fa120)`.
+Within the ec2-instance you should run the make command after cloning this repo.
+
 ## Usage ##
 Here is the overall sequence
   1. Create gifs and post them to s3
