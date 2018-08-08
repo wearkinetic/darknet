@@ -4,7 +4,12 @@ Mechanical twerk is a collection of scripts for using Amazon Mechanical Turk to 
 
 ## Setup ##
 This is intended to be run on an ec2 instance of the `Deep Learning AMI (Amazon Linux) Version 9.0 (ami-5f2fa120)`.
-Within the ec2-instance you should run the make command after cloning this repo.
+After initializing your instance you must
+  1. run `make`
+  2. download the yolov3 weights `wget https://pjreddie.com/media/files/yolov3.weights`
+  2. `source activate tensorflow_p36` to activate the Conda Environment
+  3. `aws configure` (get credentials from somebody)
+  4. `sudo apt-get install imagemagick`
 
 ## Usage ##
 Here is the overall sequence
@@ -25,7 +30,7 @@ This script downloads the video, runs yolonet, parses the result, creates gifs, 
 ### Create csv of gif-urls ###
 Again, for a single scarif-video UUID, you can create a csv file containing presigned urls to gifs created in the previous step using
 ```shell
-> python generate_presigned_url_table.py $UUID -hours=5 
+> python generate_presigned_url_table.py $UUID -hours=5
 ```
 The `hours` option determines the expiration time of the urls. The csv is written to `$UUID_urls.csv`
 
