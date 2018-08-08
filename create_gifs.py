@@ -26,6 +26,7 @@ for start, end in windows:
 processes = [Popen(cmd, shell=True) for cmd in commands]
 
 # wait for completion
+keys = list()
 for p,fn in zip(processes,files):
     try:
         return_code = p.wait()
@@ -35,7 +36,11 @@ for p,fn in zip(processes,files):
         print('failed to create {:s}'.format(fn), file=sys.stderr)
     else:
         try:
-            #s3.upload_file(Bucket='kinetic-mechanical-twerk', Key=fn, Filename=fn)
-            print('uploaded')
+            s3.upload_file(Bucket='kinetic-mechanical-twerk', Key=fn, Filename=fn)
+            keys.append(fn)
         except:
             print('failed to upload {:s}'.format(fn), file=sys.stderr)
+
+with open('{:s}/gif_keys.json', 'w') as f:
+    import json
+    json.dump(keys,f)
