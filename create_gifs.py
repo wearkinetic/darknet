@@ -27,20 +27,26 @@ processes = [Popen(cmd, shell=True) for cmd in commands]
 
 # wait for completion
 keys = list()
-for p,fn in zip(processes,files):
-    try:
-        return_code = p.wait()
-    except:
-        continue
-    if return_code != 0:
-        print('failed to create {:s}'.format(fn), file=sys.stderr)
-    else:
-        try:
-            s3.upload_file(Bucket='kinetic-mechanical-twerk', Key=fn, Filename=fn)
-            keys.append(fn)
-        except:
-            print('failed to upload {:s}'.format(fn), file=sys.stderr)
 
-with open('{:s}/gif_keys.json', 'w') as f:
+while len(processes) > 0:
+    for p,cmd in zip(processes,commands):
+        return_code = p.poll()
+        if return_code is not None:
+            if return_code != 0:
+                print('COMMAND FAILED: {:s}'.format(cmd))
+            processes.remove(p)
+            commands.remove(cmd)
+    import time
+    time.sleep(1)
+
+for fn in files:
+    try:
+        s3.upload_file(Bucket='kinetic-mechanical-twerk', Key=fn, Filename=fn)
+        keys.append(fn)
+    except:
+        print('Failed to upload {:s}'.format(fn))
+
+
+with open('{:s}/gif_keys.json'.format(uuid), 'w') as f:
     import json
     json.dump(keys,f)

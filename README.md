@@ -9,7 +9,7 @@ After initializing your instance you must
   2. download the yolov3 weights `wget https://pjreddie.com/media/files/yolov3.weights`
   2. `source activate tensorflow_p36` to activate the Conda Environment
   3. `aws configure` (get credentials from somebody)
-  4. `sudo apt-get install imagemagick`
+  4. `sudo yum install ImageMagick` (after a `sudo yum update`)
 
 ## Usage ##
 Here is the overall sequence
