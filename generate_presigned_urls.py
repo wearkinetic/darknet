@@ -1,17 +1,16 @@
 import boto3
 import sys, os
-input_fn = sys.argv[1]
-uuid,_ = os.split(input_fn)
-with open(input_fn,'r') as f:
-    import json
-    keys = json.load(input_fn)
+
+uuid = sys.argv[1]
 
 # Get the service client.
 s3 = boto3.client('s3')
-N_hours = 24*3
+N_hours = 24
 url_list = list()
 
-for key in keys:
+directory = '{:s}/gifs'.format(uuid)
+for fn in os.listdir(directory):
+    key = os.path.join(directory,fn)
     url = s3.generate_presigned_url(
         ClientMethod='get_object',
         Params={
@@ -22,9 +21,9 @@ for key in keys:
     )
     url_list.append(url)
 
-with open('{:s}/media-links.csv','w') as f:
+with open('{:s}/media-links.csv'.format(uuid),'w') as f:
     import csv
     writer = csv.writer(f)
-    writer.writerow('media-links')
+    writer.writerow(['media-links'])
     for url in url_list:
-        writer.writerow(url)
+        writer.writerow([url,])
