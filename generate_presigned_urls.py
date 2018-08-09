@@ -21,9 +21,9 @@ for fn in os.listdir(directory):
     )
     url_list.append(url)
 
-with open('{:s}/media-links.csv'.format(uuid),'w') as f:
+with open('{:s}/mturk_input.csv'.format(uuid),'w') as f:
     import csv
     writer = csv.writer(f)
-    writer.writerow(['media-links'])
+    writer.writerow(['image_url'])
     for url in url_list:
         writer.writerow([url,])
