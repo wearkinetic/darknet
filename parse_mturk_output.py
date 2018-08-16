@@ -52,23 +52,43 @@ def annotate_scarif_video(uuid, start, end, label, assignmentId):
     side effects:
         a new entry is placed in the videoAnnotations table in scarif
     """
-    from bravado.client import SwaggerClient
-    client = SwaggerClient.from_url('http://scarif-api.staging.wearkinetic.com/swagger.json')
     # query to check that we've not already uploaded this annotation
     query = 'SELECT * FROM \"videoAnnotation\" WHERE label ~\'{:s}\''.format(assignmentId)
     import pg8000
     from os import environ as env
-    with pg8000.connect(user=env['SCARIF_USER'], host=env['SCARIF_HOST'], database='scarif', password=env['SCARIF_PASS']) as conn:
-        with conn.cursor() as cursor:
-            cursor.execute(query)
-            response = cursor.fetchone()
+    conn = pg8000.connect(
+        user=env['SCARIF_USER'],
+        host=env['SCARIF_HOST'],
+        database='scarif',
+        password=env['SCARIF_PASS']
+    )
+    cursor = conn.cursor()
+    cursor.execute(query)
+    response = cursor.fetchone()
+    cursor.close()
+    conn.close()
 
     if response != None:
-        print('annotation is already present',filename=sys.stderr)
+        print('annotation is already present',file=sys.stderr)
         return response[0]
 
+    #EXAMPLE CURL COMMAND
+    #curl -X POST "http://scarif-api.wearkinetic.com/v1/annotate/video" -H "accept: application/json" -H "api_key: asdasd" -H "Content-Type: application/json" -d "{ \"end_time\": 0, \"label\": \"string\", \"start_time\": 1, \"target_uuid\": \"b607a3c1-87d1-417d-afa5-972ab2ce694f\"}"
+    from bravado.requests_client import RequestsClient
+    from bravado.client import SwaggerClient
+    import json
+    http_client = RequestsClient()
+    http_client.set_api_key(
+        'scarif-api.wearkinetic.com', 'LITERALLY ANY STRING',
+        param_name='api_key', param_in='header'
+    )
+    client = SwaggerClient.from_url(
+        'http://scarif-api.wearkinetic.com/swagger.json',
+        http_client=http_client
+    )
+    label_aug = json.dumps({'label':label, 'assignmentId':assignmentId})
     ann = client.get_model('Annotation')(
-        label=json.dumps({'label':label, 'assignmentId':assignmentId}),
+        label=label_aug,
         start_time=start,
         end_time=end,
         target_uuid=uuid
@@ -89,4 +109,6 @@ if __name__ == '__main__':
             url = row['Input.image_url']
             label = row['Answer.categories']
             bucket, uuid, start, end = parse_presigned_s3url(url)
-            annotate_scarif_video(uuid, start, end, label, assignmentId)
+            response = annotate_scarif_video(uuid, start, end, label, assignmentId)
+            print(response)
+            break
