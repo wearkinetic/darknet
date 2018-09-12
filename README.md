@@ -26,12 +26,35 @@ For a single scarif video uuid you may run
 ```
 This script downloads the video, runs yolonet, parses the result, creates gifs, and uploads them to s3 at `s3://mturk/$UUID/frame_X_though_Y.gif` where `X` and `Y` are frame indices indicating the range of frames included in the given gif.
 
+For batch processing do
+```shell
+> sh batch_extract_relevant_gifs.sh PATH/TO/FILE/OF/UUIDS
+```
+where the file of uuids is a text file where each line is a uuid.
+In this case we expect each of the uuids to be associated to a video of the same
+annotation category.  Here are the possible categories:
+ - squat lifts
+ - twisting
+ - bad lifts
+ - ladder climbing
+ - ladder jumping
+ - safe jumping
+
+
 ### Create csv of gif-urls ###
 For a single scarif-video UUID, you can create a csv file containing presigned urls to gifs created in the previous step using
 ```shell
 > python generate_presigned_url_table.py $UUID
 ```
-The csv is written to `$(UUID)_urls.csv`. The urls last about a day.
+
+For a batch of uuids do
+```shell
+> python batch_generate_presigned_urls.py
+```
+where the file of uuids is a text file where each line is a uuid.
+
+
+The csv is written to `$[NAME_OF_INPUT_FILE]_urls.csv`. The urls last about a day.
 
 ### Create a new batch job ###
 You to use the HIT Type and Layout corresponding to the contents of the video.  For example a video of squatting should use the "Annotate Walking for squat-lift videos" batch-job.  Currently I use the GUI at [https://requester.mturk.com/](https://requester.mturk.com/) to do this step.
