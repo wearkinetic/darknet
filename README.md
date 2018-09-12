@@ -46,6 +46,8 @@ In the future, if this step is coded the following table will probably be useful
 | twisting | `3RSP1MSSW0L7M90318VNFEAIM3NUK4` | `3GK1B7C7NNLX16GQQ4TLZV12OAM2NU` |
 | bad lifts | `3RSP1MSSW0L7M90318VNFEAIM3NUK4` | `3LQR9N58ZMFJWAT3QGLM3MB2R65KDF` |
 | ladder climbing | `385XUCFVXXPMLM00L6IC4JN53O14V8` | `3FVQ71UKJAYXER6C7CK1V7YIYU5YLT` |
+| ladder jumping | `36NY760EF7GMUCJQGBMTT21SMWVB3U` | `375TY3MH0W6WZWTV0C7X6K6FWQ2KJT` |
+| safe jumping | `3O471962EPEC5TWDC2PJFIOO5322UR` | `3U3GGGLICJMAZO8SNXIRB8AO01ZCND` |
 
 ### Parse the AMT results ###
 After you approve the results on AMT, you can download them as a csv-file and then run
