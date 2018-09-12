@@ -103,12 +103,8 @@ if __name__ == '__main__':
         reader = csv.DictReader(f)
         for row in reader:
             assignmentId = row['AssignmentId']
-            if row['Approve'] != 'Approved':
-                print('skipping {:s} with status {:s}'.format(assignmentId, str(row['Approve'])))
-                continue
             url = row['Input.image_url']
             label = row['Answer.categories']
             bucket, uuid, start, end = parse_presigned_s3url(url)
             response = annotate_scarif_video(uuid, start, end, label, assignmentId)
             print(response)
-            break
