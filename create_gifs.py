@@ -43,6 +43,7 @@ for fn in files:
     try:
         s3.upload_file(Bucket='kinetic-mechanical-twerk', Key=fn, Filename=fn)
         keys.append(fn)
+        os.remove(fn)
     except:
         print('Failed to upload {:s}'.format(fn))
 
@@ -50,3 +51,6 @@ for fn in files:
 with open('{:s}/gif_keys.json'.format(uuid), 'w') as f:
     import json
     json.dump(keys,f)
+
+if len(os.listdir(gif_dir))==0:
+    os.removedirs(uuid)
