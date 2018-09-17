@@ -53,4 +53,5 @@ with open('{:s}/gif_keys.json'.format(uuid), 'w') as f:
     json.dump(keys,f)
 
 if len(os.listdir(gif_dir))==0:
-    os.removedirs(uuid)
+    import shutil
+    shutil.rmtree(uuid, ignore_errors=True)
