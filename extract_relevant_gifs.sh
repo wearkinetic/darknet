@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -e
+
 UUID=$1
 
 # download video
