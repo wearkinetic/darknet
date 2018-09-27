@@ -5,14 +5,17 @@ uuid_file = sys.argv[1] # Should be a txt file where each line is a video uuid
 
 # Get the service client.
 s3 = boto3.client('s3')
+s3_rsrc = boto3.resource('s3')
+bucket = s3_rsrc.Bucket('kinetic-mechanical-twerk')
 N_hours = 24
 url_list = list()
-
 with open(uuid_file,'r') as f:
     for uuid in f.readlines():
-        directory = '{:s}/gifs'.format(uuid)
-        for fn in os.listdir(directory):
-            key = os.path.join(directory,fn)
+        uuid = uuid.strip('\n')
+        prefix = '{:s}/gifs'.format(uuid)
+        print(prefix)
+        for obj in bucket.objects.filter(Prefix=prefix):
+            key = obj.key
             url = s3.generate_presigned_url(
                 ClientMethod='get_object',
                 Params={
