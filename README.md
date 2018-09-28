@@ -28,7 +28,7 @@ This script downloads the video, runs yolonet, parses the result, creates gifs, 
 
 For batch processing do
 ```shell
-> sh batch_extract_relevant_gifs.sh PATH/TO/FILE/OF/UUIDS
+> python batch_extract_relevant_gifs.py PATH/TO/FILE/OF/UUIDS
 ```
 where the file of uuids is a text file where each line is a uuid.
 In this case we expect each of the uuids to be associated to a video of the same
@@ -75,7 +75,7 @@ In the future, if this step is coded the following table will probably be useful
 ### Parse the AMT results ###
 After you approve the results on AMT, you can download them as a csv-file and then run
 ```shell
-> python parse_AMT_result.py AMT_RESULT.csv
+> python parse_mturk_output.py AMT_RESULT.csv
 ```
 **CAUTION: THIS POSTS THE ANNOTATIONS TO SCARIF** (idempotently)
 
