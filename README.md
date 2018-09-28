@@ -57,11 +57,28 @@ where the file of uuids is a text file where each line is a uuid.
 The csv is written to `$[NAME_OF_INPUT_FILE]_urls.csv`. The urls last about a day.
 
 ### Create a new batch job ###
-You to use the HIT Type and Layout corresponding to the contents of the video.  For example a video of squatting should use the "Annotate Walking for squat-lift videos" batch-job.  Currently I use the GUI at [https://requester.mturk.com/](https://requester.mturk.com/) to do this step.
+You to use the HIT Type and Layout corresponding to the contents of the video. For example, there is one layout just for videos that involve people on ladders, another layout for videos of people doing bad bends.
+These layouts are currently associated with the tech@wearkinetic.com account at  [https://requester.mturk.com/](https://requester.mturk.com/). I recommend visiting [https://requester.mturk.com/](https://requester.mturk.com/), getting confused, and then reading the documentation for creating a batch job on AMT  [here](https://console.aws.amazon.com/console/home). In one step, you are asked to upload a csv.  That is where you upload the file created in the previous step. We might be able to automate this and avoid using the GUI, but it's probably not worth the time.
 
-The documentation for creating a batch job on AMT can be found [here](https://console.aws.amazon.com/console/home). In one step, you are asked to upload a csv.  That is where you upload the `$(UUID)_urls.csv` created inn the previous step.
+### Parse the AMT results ###
+After you approve the results on AMT, you can download them as a csv-file and then run
+```shell
+> source .scarif_creds
+> python parse_mturk_output.py AMT_RESULT.csv
+```
+where `.scarif_creds` is a file of the form
+```
+export SCARIF_HOST=terraform-003403234NumbersAreCool.sdlfkjRandomness.us-east-2.rds.amazonaws.com
+export SCARIF_PASS=TheBestPasswordEver
+export SCARIF_USER=JohnMalkovich
+```
 
-In the future, if this step is coded the following table will probably be useful
+**CAUTION: THIS POSTS THE ANNOTATIONS TO SCARIF** (idempotently)
+
+Hooray!  You are done.
+
+## Extra: Automating The Mturk Requester step
+In the future, if this step is automated the following table will probably be useful
 
 | video contents | HIT Type ID | Layout ID |
 | --- | --- | --- |
@@ -72,14 +89,8 @@ In the future, if this step is coded the following table will probably be useful
 | ladder jumping | `36NY760EF7GMUCJQGBMTT21SMWVB3U` | `375TY3MH0W6WZWTV0C7X6K6FWQ2KJT` |
 | safe jumping | `3O471962EPEC5TWDC2PJFIOO5322UR` | `3U3GGGLICJMAZO8SNXIRB8AO01ZCND` |
 
-### Parse the AMT results ###
-After you approve the results on AMT, you can download them as a csv-file and then run
-```shell
-> python parse_mturk_output.py AMT_RESULT.csv
-```
-**CAUTION: THIS POSTS THE ANNOTATIONS TO SCARIF** (idempotently)
 
-# Darknet #
+## Darknet
 This repo was originally forked from [Darknet](https://github.com/pjreddie/darknet), an open source neural network framework written in C and CUDA. It is fast, easy to install, and supports CPU and GPU computation.
 
 For more information see the [Darknet project website](http://pjreddie.com/darknet).
